@@ -21,6 +21,13 @@ host_ip = '192.168.0.117' # Here according to your server ip write the address
 port = 9999
 client_socket.connect((host_ip,port))
 
+# for saving video
+frame_width = int(drone.get_frame_read().frame.get(3))
+#frame_width = int(video.get(3))
+frame_height = int(drone.get_frame_read().frame.get(3))
+size = (frame_width, frame_height)
+result = cv2.VideoWriter('filename.avi', cv2.VideoWriter_fourcc(*'MJPG'), 10, size)
+
 if client_socket: 
 	while True:
 		try:
@@ -30,6 +37,8 @@ if client_socket:
 			message = struct.pack("Q",len(a))+a
 			client_socket.sendall(message)
 			cv2.imshow(f"TO: {host_ip}",frame)
+			# save video from frames
+			result.write(frame)
 			key = cv2.waitKey(1) & 0xFF
 			if key == ord("q"):
 				client_socket.close()
