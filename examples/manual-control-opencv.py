@@ -14,6 +14,7 @@
 
 from djitellopy import Tello
 import cv2, math, time
+import socket
 
 tello = Tello()
 tello.connect()
@@ -23,6 +24,12 @@ frame_read = tello.get_frame_read()
 
 tello.takeoff()
 
+host = socket.gethostname()  # as both code is running on same pc
+port = 5000  # socket server port number
+
+client_socket = socket.socket()  # instantiate
+client_socket.connect((host, port))  # connect to the server
+
 while True:
     # In reality you want to display frames in a seperate thread. Otherwise
     #  they will freeze while the drone moves.
@@ -31,6 +38,11 @@ while True:
     cv2.imshow("drone", img)
 
     key = cv2.waitKey(1) & 0xff
+    message = 'get data'
+    client_socket.send(message.encode())  # send message
+    data = client_socket.recv(1024).decode()  # receive response
+    key = data
+ 
     if key == 27: # ESC
         break
     elif key == ord('w'):
@@ -50,4 +62,5 @@ while True:
     elif key == ord('f'):
         tello.move_down(30)
 
+client_socket.close()  # close the connection
 tello.land()
