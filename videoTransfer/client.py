@@ -5,6 +5,7 @@
 import socket,cv2, pickle,struct
 import pyshine as ps # pip install pyshine
 import imutils # pip install imutils
+import time
 camera = True
 if camera == True:
 	vid = cv2.VideoCapture(0)
