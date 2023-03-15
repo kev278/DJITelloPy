@@ -10,7 +10,7 @@ drone.connect()
 drone.streamon()
 #drone.set_video_direction(1)
 
-sender = imagezmq.ImageSender(connect_to='192.168.0.117:5555')
+sender = imagezmq.ImageSender(connect_to='tcp://192.168.0.117:5555')
 
 rpi_name = socket.gethostname() # send RPi hostname with each image
 time.sleep(2.0)  # allow camera sensor to warm up
