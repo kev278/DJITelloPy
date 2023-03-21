@@ -31,6 +31,7 @@ result = cv2.VideoWriter('filename.avi', cv2.VideoWriter_fourcc(*'MJPG'), 10, si
 if client_socket: 
 	while True:
 		try:
+			time.sleep(5)
 			frame = drone.get_frame_read().frame
 			frame = imutils.resize(frame,width=380)
 			a = pickle.dumps(frame)
